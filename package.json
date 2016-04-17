@@ -1,27 +1,27 @@
 {
-  "name": "bizviz",
-  "version": "1.0.0",
-  "main": "main.js",
-  "scripts": {
-    "test": "jest",
-    "build": "webpack --progress -d -v"
-  },
-  "author": "",
-  "license": "MIT",
-  "description": "",
-  "dependencies": {
-    "babel-preset-react": "^6.5.0",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1"
-  },
-  "devDependencies": {
-    "babel-jest": "^11.0.1",
-    "babel-polyfill": "^6.7.4",
-    "file-loader": "^0.8.5",
-    "jest-cli": "^11.0.1"
-  },
-  "jest": {
-    "verbose": true,
-    "collectCoverage": true
-  }
+    "name": "bizviz",
+    "version": "1.0.0",
+    "main": "./src/main.js",
+    "scripts": {
+        "test": "jest",
+        "build": "webpack --progress -d -v"
+    },
+    "author": "",
+    "license": "MIT",
+    "description": "",
+    "dependencies": {
+        "babel-preset-react": "^6.5.0",
+        "react": "^15.0.1",
+        "react-dom": "^15.0.1"
+    },
+    "devDependencies": {
+        "babel-jest": "^11.0.1",
+        "babel-polyfill": "^6.7.4",
+        "file-loader": "^0.8.5",
+        "jest-cli": "^11.0.1"
+    },
+    "jest": {
+        "verbose": true,
+        "collectCoverage": true
+    }
 }

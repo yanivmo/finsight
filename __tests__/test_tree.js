@@ -1,5 +1,5 @@
-jest.unmock('../tree');
-import {iterateTree} from '../tree'
+jest.unmock('../src/tree');
+import {iterateTree} from '../src/tree'
 
 describe("Tree iteration tests", () => {
     const treeData = {
