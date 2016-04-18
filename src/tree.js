@@ -4,6 +4,23 @@ export function iterateTree(treeNode, f) {
     }
 }
 
+
+export let Tree = React.createClass({
+    render: function() {
+        let treeNode = this.props.data;
+        let children = treeNode.children.map(function (child) { 
+            return (<li><Tree data={child} key={child.id} /></li>);
+        });
+        return (
+            <div className="treeNode">
+                <div className="treeNodeName">{treeNode.name}</div>
+                <ul>{children}</ul>
+            </div>
+        );
+    }
+});
+
+
 function addIds(treeData) {
     let serialNum = 1;
     iterateTree(treeData, (node) => {
@@ -13,21 +30,6 @@ function addIds(treeData) {
         return true;
     });
 }
-
-// var Tree = React.createClass({
-//     render: function() {
-//         var treeNode = this.props.data;
-//         var children = treeNode.children.map(function (child) { 
-//             return (<li><Tree data={child} key={child.id} /></li>);
-//         });
-//         return (
-//             <div className="treeNode">
-//                 <div className="treeNodeName">{treeNode.name}</div>
-//                 <ul>{children}</ul>
-//             </div>
-//         );
-//     }
-// });
 
 // addIds(inputData.accounts[0]);
 

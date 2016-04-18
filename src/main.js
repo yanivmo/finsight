@@ -1,8 +1,8 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 // Bundled files
-var treeHtmlUrl = require('./tree.html')
+import './tree.html';
 
 ReactDOM.render(
   <h1>Hello, world!</h1>,
