@@ -1,4 +1,4 @@
-export let inputData = {
+export const inputData = {
     "accounts": [{
         "balance": [18866.0, 28830.0, 22026.0, 21962.0, 23216.0, 27150.0, 29557.0, 27609.0, 25886.0, 22824.0, 30340.0, 26146.0],
         "name": "Expenses",

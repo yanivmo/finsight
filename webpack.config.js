@@ -15,5 +15,6 @@ module.exports = {
             loader: 'file-loader',
             query: {name: '[name].[ext]'}
         }]
-    }
+    },
+    devtool: '#eval-source-map'
 };
