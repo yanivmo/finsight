@@ -9,8 +9,10 @@ module.exports = {
         {
             test: /\.jsx?/,
             loader: 'babel'
-        },
-        {
+        },{
+            test: /\.scss$/,
+            loaders: ['style', 'css', 'sass'],
+        },{
             test: /\.html$/,
             loader: 'file-loader',
             query: {name: '[name].[ext]'}

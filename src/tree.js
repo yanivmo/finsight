@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import './style.scss'
+
 export function iterateTree(treeNode, f) {
     if (f(treeNode)) {
         treeNode.children.forEach((child) => { iterateTree(child, f); })
