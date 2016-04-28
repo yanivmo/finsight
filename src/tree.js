@@ -20,7 +20,7 @@ export let Tree = React.createClass({
         return (
             <div className="tree-node" id={"node-" + treeNode.id}>
                 <input type="checkbox" id={"checkbox-" + treeNode.id}/>
-                <label className="tree-node-name tree-node-checkbox" for={"checkbox-" + treeNode.id}>{treeNode.name}</label>
+                <label htmlFor={"checkbox-" + treeNode.id}>{treeNode.name}</label>
                 <ul>{children}</ul>
             </div>
         );

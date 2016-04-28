@@ -10,15 +10,21 @@
     
     input[type=checkbox] {
         display: none;
+        
+        &:checked + label {
+            @extend .tree-icon-check-circle-o;  
+        }
+    }
+    
+    label {
+        @extend .tree-icon-circle-o;
+
+        &:before {
+            margin-right: 0.2em;
+            vertical-align: sub;
+            color: lightgray;
+        }
     }
 }
-
-.tree-node-checkbox {
-    @extend .tree-icon-check-circle-o;
-} 
-
-.tree-node-checkbox:before {
-    margin-right: 0.2em;
-    vertical-align: sub;
-    color: lightgray;      
-}
+ 
+  
