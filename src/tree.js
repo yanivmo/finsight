@@ -14,14 +14,14 @@ export let Tree = React.createClass({
         let children = treeNode.children.map(function (child) { 
             return (
                 <li key={child.id}>
-                    <i className="fa-li fa fa-check-square"></i>
                     <Tree data={child} />
                 </li>);
         });
         return (
-            <div className="treeNode" id={treeNode.id}>
-                <div className="treeNodeName">{treeNode.name}</div>
-                <ul className="fa-ul">{children}</ul>
+            <div className="tree-node" id={"node-" + treeNode.id}>
+                <input type="checkbox" id={"checkbox-" + treeNode.id}/>
+                <label className="tree-node-name tree-node-checkbox" for={"checkbox-" + treeNode.id}>{treeNode.name}</label>
+                <ul>{children}</ul>
             </div>
         );
     }

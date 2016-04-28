@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'Tree Icons';
+    src: url('./fonts/tree-icons.eot');
+    src: url('./fonts/tree-icons.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/tree-icons.woff') format('woff'),
+         url('./fonts/tree-icons.ttf') format('truetype'),
+         url('./fonts/tree-icons.svg#Tree-Icons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.tree-icon {
+   display: inline-block;
+   font-family: 'Tree Icons';
+   font-style: normal;
+   font-weight: normal;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+.tree-icon-circle-o:before       { @extend .tree-icon; content:'\0041'; }
+.tree-icon-circle:before         { @extend .tree-icon; content:'\0042'; }
+.tree-icon-check-circle-o:before { @extend .tree-icon; content:'\0043'; }
+.tree-icon-check-circle:before   { @extend .tree-icon; content:'\0044'; }

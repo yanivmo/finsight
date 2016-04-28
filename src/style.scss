@@ -1,3 +1,24 @@
-.treeNode { 
-    width: 100%; 
+@import 'tree-icons';
+
+.tree-node { 
+    font-size: x-large;
+    width: 100%;
+    
+    ul {
+        list-style: none;
+    } 
+    
+    input[type=checkbox] {
+        display: none;
+    }
+}
+
+.tree-node-checkbox {
+    @extend .tree-icon-check-circle-o;
+} 
+
+.tree-node-checkbox:before {
+    margin-right: 0.2em;
+    vertical-align: sub;
+    color: lightgray;      
 }

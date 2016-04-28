@@ -16,6 +16,10 @@ module.exports = {
             test: /\.html$/,
             loader: 'file-loader',
             query: {name: '[name].[ext]'}
+        },{
+            test: /\/fonts\/|\\fonts\\/,
+            loader: 'file-loader',
+            query: {name: 'fonts/[name].[ext]'}
         }]
     },
     devtool: '#eval-source-map'
