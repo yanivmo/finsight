@@ -9,7 +9,7 @@
     font-style: normal;
 }
 
-.tree-icon {
+%tree-icon {
    display: inline-block;
    font-family: 'Tree Icons';
    font-style: normal;
@@ -19,7 +19,7 @@
    -moz-osx-font-smoothing: grayscale;
 }
 
-.tree-icon-circle-o:before       { @extend .tree-icon; content:'\0041'; }
-.tree-icon-circle:before         { @extend .tree-icon; content:'\0042'; }
-.tree-icon-check-circle-o:before { @extend .tree-icon; content:'\0043'; }
-.tree-icon-check-circle:before   { @extend .tree-icon; content:'\0044'; }
+.tree-icon-circle-o:before       { @extend %tree-icon; content:'\0041'; }
+.tree-icon-circle:before         { @extend %tree-icon; content:'\0042'; }
+.tree-icon-check-circle-o:before { @extend %tree-icon; content:'\0043'; }
+.tree-icon-check-circle:before   { @extend %tree-icon; content:'\0044'; }

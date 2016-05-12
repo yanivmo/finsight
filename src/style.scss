@@ -1,5 +1,13 @@
 @import 'tree-icons';
 
+.tree-node-checked {
+    @extend .tree-icon-check-circle-o;
+}
+
+.tree-node-unchecked {
+    @extend .tree-icon-circle-o;
+}
+
 .tree-node { 
     font-size: x-large;
     width: 100%;
@@ -12,12 +20,12 @@
         display: none;
         
         &:checked + label {
-            @extend .tree-icon-check-circle-o;  
+            @extend .tree-node-checked;  
         }
     }
     
     label {
-        @extend .tree-icon-circle-o;
+        @extend .tree-node-unchecked;
 
         &:before {
             margin-right: 0.2em;
