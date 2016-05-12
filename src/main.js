@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import {inputData} from './data'
-import {Compo, Tree, iterateTree} from './tree'
+import {Compo, Tree, iterateTree, Checkbox} from './tree'
 
 // Bundled files
 import './tree.html';
@@ -19,12 +19,12 @@ function addIds(treeData) {
 
 addIds(inputData.accounts[0]);
 
+// ReactDOM.render(
+//     <Tree data={inputData.accounts[0]} />,
+//     document.getElementById('content')
+// );
+
 ReactDOM.render(
-    <Tree data={inputData.accounts[0]} />,
+    <Checkbox id="1234" label="Booga" checkState="indeterminate" />,
     document.getElementById('content')
 );
-
-// ReactDOM.render(
-//   <h1>Hello, world!</h1>,
-//   document.getElementById('content3')
-// );
