@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import {inputData} from './data'
-import {Tree, iterateTree} from './tree'
-import {Checkbox} from './checkbox'
+import {inputData} from './data';
+import {Tree, iterateTree} from './tree';
+import {Checkbox} from './checkbox';
 
 // Bundled files
 import './tree.html';
