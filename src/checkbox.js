@@ -8,6 +8,9 @@ export class Checkbox extends React.Component {
             id: props.id,
             checkState: (props.checkState ? props.checkState : Checkbox.UNCHECKED)
         };
+
+        // The HTML DOM checkbox element. Initialized via ref        
+        this.inputElement = null;
         
         this.handleChange = this.handleChange.bind(this);
         this.updateInputElement = this.updateInputElement.bind(this); 
