@@ -1,3 +1,5 @@
+'use strict';
+
 import * as React from 'react';
 
 export class Checkbox extends React.Component {
@@ -13,7 +15,6 @@ export class Checkbox extends React.Component {
         this.inputElement = null;
         
         this.handleChange = this.handleChange.bind(this);
-        this.updateInputElement = this.updateInputElement.bind(this); 
     }
     
     render() {
@@ -44,14 +45,15 @@ export class Checkbox extends React.Component {
     }
     
     handleChange(e) {
+        let newState = Checkbox.CHECKED;
         if (this.state.checkState == Checkbox.CHECKED) {
-            this.setState({checkState: Checkbox.UNCHECKED});
-        } else {
-            this.setState({checkState: Checkbox.CHECKED});
+            newState = Checkbox.UNCHECKED;
         }
         
+        this.setState({checkState: newState});
+        
         if (this.props.onChange) {
-            this.props.onChange(this.state.checkState);
+            this.props.onChange(newState);
         }
     }
 }

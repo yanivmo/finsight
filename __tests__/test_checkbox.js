@@ -8,9 +8,13 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
 describe("Checkbox component tests", function() {
+    const handleChange = (state) => {};
+    
     const buildAndTestDom = (state) => {
+        this.changeSpy = jest.genMockFunction();
+        
         const checkbox = TestUtils.renderIntoDocument(
-            <Checkbox id="1234" label="Test 1" checkState={state} />
+            <Checkbox id="1234" label="Test 1" checkState={state} onChange={this.changeSpy} />
         );
         
         const checkboxDom = ReactDOM.findDOMNode(checkbox);
@@ -43,13 +47,26 @@ describe("Checkbox component tests", function() {
         
         expect(this.inputDom.indeterminate).toBeTruthy();
         expect(this.inputDom.checked).toBeFalsy();
-        
+
+        // First click checks the checkbox        
         TestUtils.Simulate.change(this.inputDom);        
         expect(this.inputDom.indeterminate).toBeFalsy();
         expect(this.inputDom.checked).toBeTruthy();
 
+        // Second click unchecks
         TestUtils.Simulate.change(this.inputDom);        
         expect(this.inputDom.indeterminate).toBeFalsy();
         expect(this.inputDom.checked).toBeFalsy();
+        
+        // Third click checks again
+        TestUtils.Simulate.change(this.inputDom);        
+        expect(this.inputDom.indeterminate).toBeFalsy();
+        expect(this.inputDom.checked).toBeTruthy();
+        
+        // The handler should be called for each click
+        expect(this.changeSpy.mock.calls.length).toBe(3);
+        expect(this.changeSpy.mock.calls[0][0]).toBe(Checkbox.CHECKED);
+        expect(this.changeSpy.mock.calls[1][0]).toBe(Checkbox.UNCHECKED);
+        expect(this.changeSpy.mock.calls[2][0]).toBe(Checkbox.CHECKED);
     });
 });
