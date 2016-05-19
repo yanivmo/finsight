@@ -26,6 +26,6 @@ addIds(inputData.accounts[0]);
 // );
 
 ReactDOM.render(
-    <Checkbox id="1234" label="Booga" checkState="indeterminate" />,
+    <Checkbox id="1234" label="Booga" state="indeterminate" />,
     document.getElementById('content')
 );

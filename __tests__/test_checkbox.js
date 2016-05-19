@@ -14,7 +14,7 @@ describe("Checkbox component tests", function() {
         this.changeSpy = jest.genMockFunction();
         
         const checkbox = TestUtils.renderIntoDocument(
-            <Checkbox id="1234" label="Test 1" checkState={state} onChange={this.changeSpy} />
+            <Checkbox id="1234" label="Test 1" state={state} onChange={this.changeSpy} />
         );
         
         const checkboxDom = ReactDOM.findDOMNode(checkbox);

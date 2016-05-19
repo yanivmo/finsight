@@ -8,7 +8,7 @@ export class Checkbox extends React.Component {
         
         this.state = {
             id: props.id,
-            checkState: (props.checkState ? props.checkState : Checkbox.UNCHECKED)
+            state: (props.state ? props.state : Checkbox.UNCHECKED)
         };
 
         // The HTML DOM checkbox element. Initialized via ref        
@@ -40,17 +40,17 @@ export class Checkbox extends React.Component {
     }
     
     updateInputElement() {
-        this.inputElement.checked = (this.state.checkState == Checkbox.CHECKED);
-        this.inputElement.indeterminate = (this.state.checkState == Checkbox.INDETERMINATE);
+        this.inputElement.checked = (this.state.state == Checkbox.CHECKED);
+        this.inputElement.indeterminate = (this.state.state == Checkbox.INDETERMINATE);
     }
     
     handleChange(e) {
         let newState = Checkbox.CHECKED;
-        if (this.state.checkState == Checkbox.CHECKED) {
+        if (this.state.state == Checkbox.CHECKED) {
             newState = Checkbox.UNCHECKED;
         }
         
-        this.setState({checkState: newState});
+        this.setState({state: newState});
         
         if (this.props.onChange) {
             this.props.onChange(newState);
