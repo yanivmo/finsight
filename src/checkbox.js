@@ -22,11 +22,11 @@ export class Checkbox extends React.Component {
             <div>
                 <input 
                     type="checkbox" 
-                    id={"tsc-input-" + this.state.id} 
+                    id={"input-" + this.state.id} 
                     onChange={this.handleChange} 
                     ref={element => this.inputElement = element} />
                     
-                <label htmlFor={"tsc-input-" + this.state.id}>{this.props.label}</label>
+                <label htmlFor={"input-" + this.state.id}>{this.props.label}</label>
             </div>
         );        
     }

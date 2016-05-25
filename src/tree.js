@@ -1,4 +1,8 @@
+'use strict';
+
 import * as React from 'react';
+
+import {Checkbox} from './checkbox'
 
 // import './style.scss'
 
@@ -8,7 +12,7 @@ export function iterateTree(treeNode, f) {
     }
 }
 
-export let Tree = React.createClass({
+export let OldTree = React.createClass({
     render: function() {
         let treeNode = this.props.data;
         let children = treeNode.children.map((child) =>
@@ -25,3 +29,32 @@ export let Tree = React.createClass({
         );
     }
 });
+
+export class Tree extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            state: (props.state ? props.state : Checkbox.UNCHECKED)
+        };
+    }
+    
+    render() {
+        let treeNode = this.props.data;
+        let children = treeNode.children.map((child) =>
+            <li key={child.id}>
+                <Tree data={child} state={this.state.state} />
+            </li>
+        );
+        return (
+            <div>
+                <Checkbox id={treeNode.id} label={treeNode.name} state={this.state.state} />
+                <ul>{children}</ul>
+            </div>
+        );
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        
+    }
+}

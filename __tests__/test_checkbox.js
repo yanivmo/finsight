@@ -8,8 +8,6 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
 describe("Checkbox component tests", function() {
-    const handleChange = (state) => {};
-    
     const buildAndTestDom = (state) => {
         this.changeSpy = jest.genMockFunction();
         
