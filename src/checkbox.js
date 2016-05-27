@@ -8,7 +8,7 @@ export class Checkbox extends React.Component {
         
         this.state = {
             id: props.id,
-            state: (props.state ? props.state : Checkbox.UNCHECKED)
+            state: ('state' in props ? props.state : Checkbox.UNCHECKED)
         };
 
         // The HTML DOM checkbox element. Initialized via ref        
@@ -33,6 +33,14 @@ export class Checkbox extends React.Component {
     
     componentDidMount() {
         this.updateInputElement();
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        if ('state' in nextProps) {
+            if (!('state' in this.props) || (nextProps.state != this.props.state)) {
+                this.setState({state: nextProps.state});
+            }
+        }
     }
     
     componentDidUpdate() {

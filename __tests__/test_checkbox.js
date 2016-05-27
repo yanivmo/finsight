@@ -8,63 +8,85 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
 describe("Checkbox component tests", function() {
-    const buildAndTestDom = (state) => {
-        this.changeSpy = jest.genMockFunction();
+    beforeEach(() => {
+        this.container = document.createElement('div'); 
+    });
+    
+    const render = (state) => {
+        const changeSpy = jest.genMockFunction();
         
-        const checkbox = TestUtils.renderIntoDocument(
-            <Checkbox id="1234" label="Test 1" state={state} onChange={this.changeSpy} />
+        const checkbox = ReactDOM.render(
+            <Checkbox id="1234" label="Test 1" state={state} onChange={changeSpy} />,
+            this.container
         );
-        
+        return {objects: getObjects.bind(this, checkbox)};
+    };
+       
+    const getObjects = (checkbox) => {
         const checkboxDom = ReactDOM.findDOMNode(checkbox);
         
-        this.inputDom = checkboxDom.children[0];
-        expect(this.inputDom.tagName).toEqual('INPUT');
+        const inputDom = checkboxDom.children[0];
+        expect(inputDom.tagName).toEqual('INPUT');
         
-        this.labelDom = checkboxDom.children[1];
-        expect(this.labelDom.tagName).toEqual('LABEL');
+        const labelDom = checkboxDom.children[1];
+        expect(labelDom.tagName).toEqual('LABEL');
         
-        expect(this.inputDom.id).toEqual(this.labelDom.htmlFor);
+        expect(inputDom.id).toEqual(labelDom.htmlFor);
+        
+        return [checkbox, inputDom, checkbox.props.onChange];
     };
     
     it('tests checked checkbox', () => {
-        buildAndTestDom(Checkbox.CHECKED);
+        const [checkbox, inputDom, changeSpy] = render(Checkbox.CHECKED).objects();
         
-        expect(this.inputDom.indeterminate).toBeFalsy();
-        expect(this.inputDom.checked).toBeTruthy();        
+        expect(inputDom.indeterminate).toBeFalsy();
+        expect(inputDom.checked).toBeTruthy();        
     });
 
     it('tests unchecked checkbox', () => {
-        buildAndTestDom(Checkbox.UNCHECKED);
+        const [checkbox, inputDom, changeSpy] = render(Checkbox.UNCHECKED).objects();
         
-        expect(this.inputDom.indeterminate).toBeFalsy();
-        expect(this.inputDom.checked).toBeFalsy();        
+        expect(inputDom.indeterminate).toBeFalsy();
+        expect(inputDom.checked).toBeFalsy();        
     });
 
     it('tests indeterminate checkbox', () => {
-        buildAndTestDom(Checkbox.INDETERMINATE);
+        const [checkbox, inputDom, changeSpy] = render(Checkbox.INDETERMINATE).objects();
         
-        expect(this.inputDom.indeterminate).toBeTruthy();
-        expect(this.inputDom.checked).toBeFalsy();
+        expect(inputDom.indeterminate).toBeTruthy();
+        expect(inputDom.checked).toBeFalsy();
 
         // First click checks the checkbox        
-        TestUtils.Simulate.change(this.inputDom);        
-        expect(this.inputDom.indeterminate).toBeFalsy();
-        expect(this.inputDom.checked).toBeTruthy();
+        TestUtils.Simulate.change(inputDom);        
+        expect(inputDom.indeterminate).toBeFalsy();
+        expect(inputDom.checked).toBeTruthy();
 
         // Second click unchecks
-        TestUtils.Simulate.change(this.inputDom);        
-        expect(this.inputDom.indeterminate).toBeFalsy();
-        expect(this.inputDom.checked).toBeFalsy();
+        TestUtils.Simulate.change(inputDom);        
+        expect(inputDom.indeterminate).toBeFalsy();
+        expect(inputDom.checked).toBeFalsy();
         
         // Third click checks again
-        TestUtils.Simulate.change(this.inputDom);        
-        expect(this.inputDom.indeterminate).toBeFalsy();
-        expect(this.inputDom.checked).toBeTruthy();
+        TestUtils.Simulate.change(inputDom);        
+        expect(inputDom.indeterminate).toBeFalsy();
+        expect(inputDom.checked).toBeTruthy();
         
         // The handler should be called for each click
-        expect(this.changeSpy.mock.calls.length).toBe(3);
-        expect(this.changeSpy.mock.calls[0][0]).toBe(Checkbox.CHECKED);
-        expect(this.changeSpy.mock.calls[1][0]).toBe(Checkbox.UNCHECKED);
-        expect(this.changeSpy.mock.calls[2][0]).toBe(Checkbox.CHECKED);
+        expect(changeSpy.mock.calls.length).toBe(3);
+        expect(changeSpy.mock.calls[0][0]).toBe(Checkbox.CHECKED);
+        expect(changeSpy.mock.calls[1][0]).toBe(Checkbox.UNCHECKED);
+        expect(changeSpy.mock.calls[2][0]).toBe(Checkbox.CHECKED);
     });
+    
+    it('tests checkbox handling of props changes', () => {
+        const [checkbox, inputDom, changeSpy] = render(Checkbox.UNCHECKED).objects();
+        
+        expect(inputDom.indeterminate).toBeFalsy();
+        expect(inputDom.checked).toBeFalsy();
+        
+        render(Checkbox.CHECKED);        
+        expect(inputDom.indeterminate).toBeFalsy();
+        expect(inputDom.checked).toBeTruthy();
+    });
+
 });
