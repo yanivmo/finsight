@@ -1,14 +1,16 @@
 'use strict';
 
 jest.unmock('../src/tree');
-jest.unmock('../src/checkbox');
-
 import {Tree, iterateTree} from '../src/tree';
+
+jest.unmock('../src/checkbox');
 import {Checkbox} from '../src/checkbox';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
+
+import {clickCheckbox} from '../src/test-utils';
 
 
 describe("Tree iteration tests", function() {
@@ -69,13 +71,7 @@ describe("Tree component tests", function() {
         
         return [tree, checkboxes];
     };
-    
-    // Simulates a change event on the input element inside the checkbox component
-    var simulateChange = (checkbox) => {
-        const input = TestUtils.findRenderedDOMComponentWithTag(checkbox, "input");
-        TestUtils.Simulate.change(input);
-    };
-    
+        
     beforeEach(() => {
         const verify = (checkbox, inputVerificationCallback) => {
             const input = TestUtils.findRenderedDOMComponentWithTag(checkbox, "input");
@@ -110,12 +106,12 @@ describe("Tree component tests", function() {
             expect(cb).toBeUnchecked();
         }
         
-        simulateChange(checkboxes[0]);
+        clickCheckbox(checkboxes[0]);
         for (let cb of checkboxes) {
             expect(cb).toBeChecked();
         }
 
-        simulateChange(checkboxes[0]);
+        clickCheckbox(checkboxes[0]);
         for (let cb of checkboxes) {
             expect(cb).toBeUnchecked();
         }
