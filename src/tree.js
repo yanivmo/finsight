@@ -35,8 +35,10 @@ export class Tree extends React.Component {
         super(props);
         
         this.state = {
-            state: (props.state ? props.state : Checkbox.UNCHECKED)
+            state: ('state' in props ? props.state : Checkbox.UNCHECKED)
         };
+        
+        this.handleChange = this.handleChange.bind(this);
     }
     
     render() {
@@ -48,13 +50,21 @@ export class Tree extends React.Component {
         );
         return (
             <div>
-                <Checkbox id={treeNode.id} label={treeNode.name} state={this.state.state} />
+                <Checkbox id={treeNode.id} label={treeNode.name} state={this.state.state} onChange={this.handleChange} />
                 <ul>{children}</ul>
             </div>
         );
     }
     
+    handleChange(newState) {
+        this.setState({state: newState});
+    }
+    
     componentWillReceiveProps(nextProps) {
-        
+        if ('state' in nextProps) {
+            if (!('state' in this.props) || (nextProps.state != this.props.state)) {
+                this.setState({state: nextProps.state});
+            }
+        }
     }
 }

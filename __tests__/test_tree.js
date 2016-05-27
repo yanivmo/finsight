@@ -46,7 +46,7 @@ describe("Tree iteration tests", function() {
 
 
 describe("Tree component tests", function() {
-    const buildAndTestDom = () => {
+    const buildAndVerifyTree = () => {
         const data = {
             name: '1', id: '1', children: [
                 {name: '1.1', id: '1.1', children: [
@@ -61,11 +61,19 @@ describe("Tree component tests", function() {
         const tree = TestUtils.renderIntoDocument(
             <Tree data={data} />
         );
-        this.checkboxes = TestUtils.scryRenderedComponentsWithType(tree, Checkbox);
-        expect(this.checkboxes.length).toBe(expectedIds.size);
+        const checkboxes = TestUtils.scryRenderedComponentsWithType(tree, Checkbox);
+        expect(checkboxes.length).toBe(expectedIds.size);
         
-        const allIdsFound = this.checkboxes.every(elem => expectedIds.has(elem.props.id));
-        expect(allIdsFound).toBeTruthy();        
+        const allIdsFound = checkboxes.every(elem => expectedIds.has(elem.props.id));
+        expect(allIdsFound).toBeTruthy();   
+        
+        return [tree, checkboxes];
+    };
+    
+    // Simulates a change event on the input element inside the checkbox component
+    var simulateChange = (checkbox) => {
+        const input = TestUtils.findRenderedDOMComponentWithTag(checkbox, "input");
+        TestUtils.Simulate.change(input);
     };
     
     beforeEach(() => {
@@ -75,10 +83,11 @@ describe("Tree component tests", function() {
             callbackText = callbackText.slice(callbackText.indexOf("return") + 7, callbackText.lastIndexOf(";"));
             return {
                 pass: inputVerificationCallback(input),
-                message: `Expected (${callbackText}) got (checked == ${input.checked} && indeterminate == ${input.indeterminate})`
+                message: `Input element ${input.id}\nexpected (${callbackText})\nactual   (input.checked == ${input.checked} && input.indeterminate == ${input.indeterminate})`
             };
         }
         
+        // Matchers that check the state of a checkbox component
         jasmine.addMatchers({
             toBeChecked() {
                 return { compare(checkbox) {
@@ -95,11 +104,19 @@ describe("Tree component tests", function() {
     });
     
     it('tests something', () => {
-        buildAndTestDom();
+        const [tree, checkboxes] = buildAndVerifyTree();
         
-        expect(this.checkboxes[0]).toBeUnchecked();
+        for (let cb of checkboxes) {
+            expect(cb).toBeUnchecked();
+        }
         
-        for (let cb of this.checkboxes) {
+        simulateChange(checkboxes[0]);
+        for (let cb of checkboxes) {
+            expect(cb).toBeChecked();
+        }
+
+        simulateChange(checkboxes[0]);
+        for (let cb of checkboxes) {
             expect(cb).toBeUnchecked();
         }
     });
