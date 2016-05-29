@@ -31,5 +31,11 @@ export const InputElementMatchers = {
         return { compare(input) {
             return testInputState(input, {checked: false, indeterminate: false});
         }};
+    },
+
+    toBeIndeterminate() {
+        return { compare(input) {
+            return testInputState(input, {checked: false, indeterminate: true});
+        }};
     }
 };

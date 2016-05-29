@@ -7,6 +7,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
+import * as CheckboxUtils from '../src/test-utils';
+
+
 describe("Checkbox component tests", function() {
     beforeEach(() => {
         this.container = document.createElement('div'); 
@@ -33,43 +36,38 @@ describe("Checkbox component tests", function() {
         
         expect(inputDom.id).toEqual(labelDom.htmlFor);
         
-        return [checkbox, inputDom, checkbox.props.onChange];
+        return [checkbox, checkbox.props.onChange];
     };
     
+    beforeEach(() => {
+        jasmine.addMatchers(CheckboxUtils.InputElementMatchers);
+    });
+    
     it('tests checked checkbox', () => {
-        const [checkbox, inputDom, changeSpy] = render(Checkbox.CHECKED).objects();
-        
-        expect(inputDom.indeterminate).toBeFalsy();
-        expect(inputDom.checked).toBeTruthy();        
+        const [checkbox, changeSpy] = render(Checkbox.CHECKED).objects();
+        expect(checkbox.inputElement).toBeChecked();
     });
 
     it('tests unchecked checkbox', () => {
-        const [checkbox, inputDom, changeSpy] = render(Checkbox.UNCHECKED).objects();
-        
-        expect(inputDom.indeterminate).toBeFalsy();
-        expect(inputDom.checked).toBeFalsy();        
+        const [checkbox, changeSpy] = render(Checkbox.UNCHECKED).objects();
+        expect(checkbox.inputElement).toBeUnchecked();
     });
 
     it('tests indeterminate checkbox', () => {
-        const [checkbox, inputDom, changeSpy] = render(Checkbox.INDETERMINATE).objects();
-        
-        expect(inputDom.indeterminate).toBeTruthy();
-        expect(inputDom.checked).toBeFalsy();
+        const [checkbox, changeSpy] = render(Checkbox.INDETERMINATE).objects();
+        expect(checkbox.inputElement).toBeIndeterminate();
 
         // First click checks the checkbox        
-        TestUtils.Simulate.change(inputDom);        
-        expect(inputDom.indeterminate).toBeFalsy();
-        expect(inputDom.checked).toBeTruthy();
+        CheckboxUtils.clickCheckbox(checkbox);        
+        expect(checkbox.inputElement).toBeChecked();
 
         // Second click unchecks
-        TestUtils.Simulate.change(inputDom);        
-        expect(inputDom.indeterminate).toBeFalsy();
-        expect(inputDom.checked).toBeFalsy();
+        CheckboxUtils.clickCheckbox(checkbox);        
+        expect(checkbox.inputElement).toBeUnchecked();
         
         // Third click checks again
-        TestUtils.Simulate.change(inputDom);        
-        expect(inputDom.indeterminate).toBeFalsy();
-        expect(inputDom.checked).toBeTruthy();
+        CheckboxUtils.clickCheckbox(checkbox);        
+        expect(checkbox.inputElement).toBeChecked();
         
         // The handler should be called for each click
         expect(changeSpy.mock.calls.length).toBe(3);
@@ -79,14 +77,11 @@ describe("Checkbox component tests", function() {
     });
     
     it('tests checkbox handling of props changes', () => {
-        const [checkbox, inputDom, changeSpy] = render(Checkbox.UNCHECKED).objects();
-        
-        expect(inputDom.indeterminate).toBeFalsy();
-        expect(inputDom.checked).toBeFalsy();
-        
+        const [checkbox, changeSpy] = render(Checkbox.UNCHECKED).objects();
+        expect(checkbox.inputElement).toBeUnchecked();
+                
         render(Checkbox.CHECKED);        
-        expect(inputDom.indeterminate).toBeFalsy();
-        expect(inputDom.checked).toBeTruthy();
+        expect(checkbox.inputElement).toBeChecked();
     });
 
 });
