@@ -10,7 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-import {clickCheckbox} from '../src/test-utils';
+import * as CheckboxUtils from '../src/test-utils';
 
 
 describe("Tree iteration tests", function() {
@@ -73,27 +73,28 @@ describe("Tree component tests", function() {
     };
         
     beforeEach(() => {
-        const verify = (checkbox, inputVerificationCallback) => {
-            const input = TestUtils.findRenderedDOMComponentWithTag(checkbox, "input");
-            let callbackText = inputVerificationCallback.toString();
-            callbackText = callbackText.slice(callbackText.indexOf("return") + 7, callbackText.lastIndexOf(";"));
-            return {
-                pass: inputVerificationCallback(input),
-                message: `Input element ${input.id}\nexpected (${callbackText})\nactual   (input.checked == ${input.checked} && input.indeterminate == ${input.indeterminate})`
-            };
+        const testInputState = (input, {checked, indeterminate}) => {
+            const result = {};
+            
+            result.pass = (input.checked == checked) && (input.indeterminate == indeterminate);
+             
+            result.message = `Input element ${input.id}\n` +
+                             `expected (checked == ${checked} && indeterminate == ${indeterminate})\n` +
+                             `actual   (checked == ${input.checked} && indeterminate == ${input.indeterminate})`;
+            return result;
         }
         
         // Matchers that check the state of a checkbox component
         jasmine.addMatchers({
             toBeChecked() {
-                return { compare(checkbox) {
-                    return verify(checkbox, input => (input.checked == true) && (input.indeterminate == false));
+                return { compare(input) {
+                    return testInputState(input, {checked: true, indeterminate: false});
                 }};
             },
 
             toBeUnchecked() {
-                return { compare(checkbox) {
-                    return verify(checkbox, input => (input.checked == false) && (input.indeterminate == false));
+                return { compare(input) {
+                    return testInputState(input, {checked: false, indeterminate: false});
                 }};
             }
         });
@@ -103,17 +104,17 @@ describe("Tree component tests", function() {
         const [tree, checkboxes] = buildAndVerifyTree();
         
         for (let cb of checkboxes) {
-            expect(cb).toBeUnchecked();
+            expect(cb.inputElement).toBeUnchecked();
         }
         
-        clickCheckbox(checkboxes[0]);
+        CheckboxUtils.clickCheckbox(checkboxes[0]);
         for (let cb of checkboxes) {
-            expect(cb).toBeChecked();
+            expect(cb.inputElement).toBeChecked();
         }
 
-        clickCheckbox(checkboxes[0]);
+        CheckboxUtils.clickCheckbox(checkboxes[0]);
         for (let cb of checkboxes) {
-            expect(cb).toBeUnchecked();
+            expect(cb.inputElement).toBeUnchecked();
         }
     });
 });
