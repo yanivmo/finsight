@@ -73,31 +73,7 @@ describe("Tree component tests", function() {
     };
         
     beforeEach(() => {
-        const testInputState = (input, {checked, indeterminate}) => {
-            const result = {};
-            
-            result.pass = (input.checked == checked) && (input.indeterminate == indeterminate);
-             
-            result.message = `Input element ${input.id}\n` +
-                             `expected (checked == ${checked} && indeterminate == ${indeterminate})\n` +
-                             `actual   (checked == ${input.checked} && indeterminate == ${input.indeterminate})`;
-            return result;
-        }
-        
-        // Matchers that check the state of a checkbox component
-        jasmine.addMatchers({
-            toBeChecked() {
-                return { compare(input) {
-                    return testInputState(input, {checked: true, indeterminate: false});
-                }};
-            },
-
-            toBeUnchecked() {
-                return { compare(input) {
-                    return testInputState(input, {checked: false, indeterminate: false});
-                }};
-            }
-        });
+        jasmine.addMatchers(CheckboxUtils.InputElementMatchers);
     });
     
     it('tests something', () => {
