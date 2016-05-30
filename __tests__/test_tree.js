@@ -68,30 +68,59 @@ describe("Tree component tests", function() {
         
         const allIdsFound = checkboxes.every(elem => expectedIds.has(elem.props.id));
         expect(allIdsFound).toBeTruthy();   
-        
-        return [tree, checkboxes];
+
+        const checkboxesMap = new Map(checkboxes.map(cb => [cb.props.id, cb]));
+        return [tree, checkboxesMap];
     };
         
     beforeEach(() => {
         jasmine.addMatchers(CheckboxUtils.InputElementMatchers);
     });
     
-    it('tests something', () => {
+    it('tests clicking the root node', () => {
         const [tree, checkboxes] = buildAndVerifyTree();
+        const root = checkboxes.get('1');
         
-        for (let cb of checkboxes) {
+        for (let cb of checkboxes.values()) {
             expect(cb.inputElement).toBeUnchecked();
         }
         
-        CheckboxUtils.clickCheckbox(checkboxes[0]);
-        for (let cb of checkboxes) {
+        CheckboxUtils.clickCheckbox(root);
+        for (let cb of checkboxes.values()) {
             expect(cb.inputElement).toBeChecked();
         }
 
-        CheckboxUtils.clickCheckbox(checkboxes[0]);
-        for (let cb of checkboxes) {
+        CheckboxUtils.clickCheckbox(root);
+        for (let cb of checkboxes.values()) {
             expect(cb.inputElement).toBeUnchecked();
         }
+    });
+
+    it('tests clicking the middle node', () => {
+        const [tree, checkboxes] = buildAndVerifyTree();
+        
+        const input = id => expect(checkboxes.get(id).inputElement);
+        const click = id => CheckboxUtils.clickCheckbox(checkboxes.get(id)); 
+        
+        input('1'    ).toBeUnchecked();
+        input('1.1'  ).toBeUnchecked();
+        input('1.1.1').toBeUnchecked();
+        input('1.1.2').toBeUnchecked();
+        input('1.1.3').toBeUnchecked();
+
+        click('1.1');        
+        input('1'    ).toBeUnchecked();
+        input('1.1'  ).toBeChecked();
+        input('1.1.1').toBeChecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeChecked();
+
+        click('1.1');        
+        input('1'    ).toBeUnchecked();
+        input('1.1'  ).toBeUnchecked();
+        input('1.1.1').toBeUnchecked();
+        input('1.1.2').toBeUnchecked();
+        input('1.1.3').toBeUnchecked();
     });
 });
 
