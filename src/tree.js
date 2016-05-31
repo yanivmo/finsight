@@ -35,35 +35,53 @@ export class Tree extends React.Component {
         super(props);
         
         this.state = {
-            state: ('state' in props ? props.state : Checkbox.UNCHECKED)
+            state: ('state' in props ? props.state : Checkbox.UNCHECKED),
+            childrenState: new Array(this.props.data.children.length)
         };
+        this.state.childrenState.fill(this.state.state);
         
-        this.handleChange = this.handleChange.bind(this);
+        this.handleOwnChange = this.handleOwnChange.bind(this);
     }
     
     render() {
         let treeNode = this.props.data;
-        let children = treeNode.children.map((child) =>
+        let children = treeNode.children.map((child, index) =>
             <li key={child.id}>
-                <Tree data={child} state={this.state.state} />
+                <Tree data={child} 
+                      state={this.state.childrenState[index]} 
+                      onChange={this.handleChildChange.bind(this, index)}/>
             </li>
         );
         return (
             <div>
-                <Checkbox id={treeNode.id} label={treeNode.name} state={this.state.state} onChange={this.handleChange} />
+                <Checkbox id={treeNode.id} label={treeNode.name} state={this.state.state} onChange={this.handleOwnChange} />
                 <ul>{children}</ul>
             </div>
         );
     }
     
-    handleChange(newState) {
-        this.setState({state: newState});
+    handleOwnChange(newState) {
+        this.enforceState(newState);
+        if ('onChange' in this.props) {
+            this.props.onChange(newState);
+        }
+    }
+    
+    handleChildChange(index, newState) {
+        
+    }
+    
+    enforceState(newState) {
+        this.setState({
+            state: newState,
+            childrenState: this.state.childrenState.fill(newState)
+        });
     }
     
     componentWillReceiveProps(nextProps) {
         if ('state' in nextProps) {
             if (!('state' in this.props) || (nextProps.state != this.props.state)) {
-                this.setState({state: nextProps.state});
+                this.enforceState(nextProps.state);
             }
         }
     }
