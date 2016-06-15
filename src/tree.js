@@ -12,27 +12,42 @@ export function iterateTree(treeNode, f) {
     }
 }
 
-export let OldTree = React.createClass({
-    render: function() {
-        let treeNode = this.props.data;
-        let children = treeNode.children.map((child) =>
-            <li key={child.id}>
-                <Tree data={child} />
-            </li>
-        );
-        return (
-            <div className="tree-node" id={"node-" + treeNode.id}>
-                <input type="checkbox" id={"checkbox-" + treeNode.id}/>
-                <label htmlFor={"checkbox-" + treeNode.id}>{treeNode.name}</label>
-                <ul>{children}</ul>
-            </div>
-        );
+
+export function calculateNodeState(ownState, childrenStates) {
+    let newState = ownState;
+    if (childrenStates.length > 0) {
+        
+        let checkedCount = 0;
+        let indeterminateCount = 0;
+        for (let childState of childrenStates) {
+            if (childState == Checkbox.CHECKED) {
+                checkedCount++;
+            } else if (childState == Checkbox.INDETERMINATE) {
+                indeterminateCount++;
+            }
+        }
+        
+        if (checkedCount == 0 && indeterminateCount == 0) {
+            newState = Checkbox.UNCHECKED;
+        } else if (checkedCount == childrenStates.length) {
+            if (ownState == Checkbox.CHECKED) {
+                newState = Checkbox.CHECKED;
+            } else {
+                newState = Checkbox.INDETERMINATE;
+            }
+        } else {
+            newState = Checkbox.INDETERMINATE;
+        }
     }
-});
+    return newState;
+}
+
 
 export class Tree extends React.Component {
     constructor(props) {
         super(props);
+        
+        console.log(this.props.data.id, "constr");
         
         this.state = {
             state: ('state' in props ? props.state : Checkbox.UNCHECKED),
@@ -61,14 +76,28 @@ export class Tree extends React.Component {
     }
     
     handleOwnChange(newState) {
+        console.log(this.props.data.id, "self changed: ( new:", newState, " old:", this.state.state, ")");
+        
         this.enforceState(newState);
         if ('onChange' in this.props) {
             this.props.onChange(newState);
         }
     }
     
-    handleChildChange(index, newState) {
+    handleChildChange(index, newChildState) {
+        console.log(this.props.data.id, "child changed: (index:", index, " new:", newChildState, " old:", this.state.childrenState[index], ")");
         
+        if (this.state.childrenState[index] != newChildState) {
+            this.state.childrenState[index] = newChildState;
+            const newOwnState = calculateNodeState(this.props.state, this.state.childrenState)
+            
+            if (newOwnState != this.state.state) {
+                this.setState({state: newOwnState});                
+                if ('onChange' in this.props) {
+                    this.props.onChange(newOwnState);
+                }
+            }
+        }
     }
     
     enforceState(newState) {
@@ -77,8 +106,9 @@ export class Tree extends React.Component {
             childrenState: this.state.childrenState.fill(newState)
         });
     }
-    
+        
     componentWillReceiveProps(nextProps) {
+        console.log(this.props.data.id, "props", nextProps);
         if ('state' in nextProps) {
             if (!('state' in this.props) || (nextProps.state != this.props.state)) {
                 this.enforceState(nextProps.state);
