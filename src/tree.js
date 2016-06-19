@@ -92,11 +92,14 @@ export class Tree extends React.Component {
             const newOwnState = calculateNodeState(this.props.state, this.state.childrenState)
             
             if (newOwnState != this.state.state) {
-                this.setState({state: newOwnState});                
-                if ('onChange' in this.props) {
-                    this.props.onChange(newOwnState);
-                }
+                this.setState({state: newOwnState}, this.notifyParent.bind(this, newOwnState));                
             }
+        }
+    }
+    
+    notifyParent(newState) {
+        if ('onChange' in this.props) {
+            this.props.onChange(newState);
         }
     }
     
@@ -106,11 +109,17 @@ export class Tree extends React.Component {
             childrenState: this.state.childrenState.fill(newState)
         });
     }
+    
+    // Returns true if the new state should override the current state of the root node
+    // and of all the children
+    shouldEnforceState(newState) {
+        return (newState != this.props.state) && (newState != this.state.state);
+    }
         
     componentWillReceiveProps(nextProps) {
-        console.log(this.props.data.id, "props", nextProps);
+        console.log(this.props.data.id, "props", nextProps.state, this.props.state, this.state.state);
         if ('state' in nextProps) {
-            if (!('state' in this.props) || (nextProps.state != this.props.state)) {
+            if (!('state' in this.props) || this.shouldEnforceState(nextProps.state)) {
                 this.enforceState(nextProps.state);
             }
         }
