@@ -151,7 +151,7 @@ describe("Tree component tests", function() {
         input('1.1.3').toBeUnchecked();
     });
 
-    it('tests clicking the bottom node', () => {
+    it('tests clicking bottom nodes', () => {
         const [tree, checkboxes] = buildAndVerifyTree();
         
         const input = id => expect(checkboxes.get(id).inputElement);
@@ -176,6 +176,77 @@ describe("Tree component tests", function() {
         input('1.1.1').toBeUnchecked();
         input('1.1.2').toBeUnchecked();
         input('1.1.3').toBeUnchecked();
+
+        click('1.1.1');        
+        click('1.1.2');        
+        click('1.1.3');        
+        input('1'    ).toBeIndeterminate();
+        input('1.1'  ).toBeIndeterminate();
+        input('1.1.1').toBeChecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeChecked();
+    });
+
+    it('tests hecktic clicking', () => {
+        const [tree, checkboxes] = buildAndVerifyTree();
+        
+        const input = id => expect(checkboxes.get(id).inputElement);
+        const click = id => CheckboxUtils.clickCheckbox(checkboxes.get(id)); 
+        
+        input('1'    ).toBeUnchecked();
+        input('1.1'  ).toBeUnchecked();
+        input('1.1.1').toBeUnchecked();
+        input('1.1.2').toBeUnchecked();
+        input('1.1.3').toBeUnchecked();
+
+        click('1');        
+        input('1'    ).toBeChecked();
+        input('1.1'  ).toBeChecked();
+        input('1.1.1').toBeChecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeChecked();
+
+        click('1.1.3');        
+        input('1'    ).toBeIndeterminate();
+        input('1.1'  ).toBeIndeterminate();
+        input('1.1.1').toBeChecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeUnchecked();
+
+        click('1.1.1');        
+        input('1'    ).toBeIndeterminate();
+        input('1.1'  ).toBeIndeterminate();
+        input('1.1.1').toBeUnchecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeUnchecked();
+
+        click('1.1.2');        
+        input('1'    ).toBeUnchecked();
+        input('1.1'  ).toBeUnchecked();
+        input('1.1.1').toBeUnchecked();
+        input('1.1.2').toBeUnchecked();
+        input('1.1.3').toBeUnchecked();
+
+        click('1.1');        
+        input('1'    ).toBeIndeterminate();
+        input('1.1'  ).toBeChecked();
+        input('1.1.1').toBeChecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeChecked();
+
+        click('1.1.1');        
+        input('1'    ).toBeIndeterminate();
+        input('1.1'  ).toBeIndeterminate();
+        input('1.1.1').toBeUnchecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeChecked();
+
+        click('1.1.1');        
+        input('1'    ).toBeIndeterminate();
+        input('1.1'  ).toBeChecked();
+        input('1.1.1').toBeChecked();
+        input('1.1.2').toBeChecked();
+        input('1.1.3').toBeChecked();
     });
 });
 

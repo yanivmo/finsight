@@ -85,7 +85,8 @@ export class Tree extends React.Component {
     
     handleOwnChange(newState) {
         console.log(this.props.data.id, "self changed: ( new:", newState, " old:", this.state.state, ")");
-        this.setState({state: newState, stateFromChildren: false});
+        this.state.childrenState.fill(newState);
+        this.setState({state: newState, stateFromChildren: false, childrenState: this.state.childrenState});
         if ('onChange' in this.props) {
             this.props.onChange(newState);
         }
@@ -97,7 +98,18 @@ export class Tree extends React.Component {
         if (this.state.childrenState[index] != newChildState) {
             const prevVisualState = calculateNodeState(this.state.childrenState);
             this.state.childrenState[index] = newChildState;
-            this.setState({childrenState: this.state.childrenState, stateFromChildren: true}, this.notifyParent.bind(this, prevVisualState));
+            
+            const newState = {
+                childrenState: this.state.childrenState, 
+                stateFromChildren: true
+            };
+             
+            const newVisualState = calculateNodeState(this.state.childrenState);
+            if (newVisualState == Checkbox.UNCHECKED) {
+                newState.state = Checkbox.UNCHECKED;
+            }
+            
+            this.setState(newState, this.notifyParent.bind(this, prevVisualState));
         }
     }
     
@@ -118,7 +130,8 @@ export class Tree extends React.Component {
         console.log(this.props.data.id, "props (new:", nextProps.state, " old prop:", this.props.state, " old state:", this.state.state);
         if ('state' in nextProps) {
             if (!('state' in this.props) || (nextProps.state != this.props.state)) {
-                this.setState({state: nextProps.state, stateFromChildren: false});
+                this.state.childrenState.fill(nextProps.state);
+                this.setState({state: nextProps.state, stateFromChildren: false, childrenState: this.state.childrenState});
             }
         }
     }
