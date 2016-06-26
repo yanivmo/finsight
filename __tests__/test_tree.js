@@ -55,28 +55,22 @@ describe("Tree node state calculation tests", function () {
     const INDETERMINATE = Checkbox.INDETERMINATE;
     
     it('tests node without children', () => {
-       expect(calculateNodeState(CHECKED, [])).toBe(CHECKED);
-       expect(calculateNodeState(UNCHECKED, [])).toBe(UNCHECKED); 
+       expect(calculateNodeState([])).toBe(UNCHECKED); 
     });
 
     it('tests nodes with one child', () => {
-       expect(calculateNodeState(CHECKED,   [CHECKED]      )).toBe(CHECKED);
-       expect(calculateNodeState(UNCHECKED, [CHECKED]      )).toBe(INDETERMINATE);
-       expect(calculateNodeState(CHECKED,   [UNCHECKED]    )).toBe(UNCHECKED);
-       expect(calculateNodeState(UNCHECKED, [UNCHECKED]    )).toBe(UNCHECKED);
-       expect(calculateNodeState(CHECKED,   [INDETERMINATE])).toBe(INDETERMINATE);
-       expect(calculateNodeState(UNCHECKED, [INDETERMINATE])).toBe(INDETERMINATE);       
+       expect(calculateNodeState([CHECKED]      )).toBe(CHECKED);
+       expect(calculateNodeState([UNCHECKED]    )).toBe(UNCHECKED);
+       expect(calculateNodeState([INDETERMINATE])).toBe(INDETERMINATE);       
     });
     
     it('tests nodes with multiple children', () => {
-       expect(calculateNodeState(CHECKED,   [CHECKED,       CHECKED,       CHECKED      ])).toBe(CHECKED);
-       expect(calculateNodeState(UNCHECKED, [CHECKED,       CHECKED,       CHECKED      ])).toBe(INDETERMINATE);
-       expect(calculateNodeState(CHECKED,   [UNCHECKED,     UNCHECKED,     UNCHECKED    ])).toBe(UNCHECKED);
-       expect(calculateNodeState(UNCHECKED, [UNCHECKED,     UNCHECKED,     UNCHECKED    ])).toBe(UNCHECKED);
-       expect(calculateNodeState(CHECKED,   [INDETERMINATE, INDETERMINATE, INDETERMINATE])).toBe(INDETERMINATE);
-       expect(calculateNodeState(CHECKED,   [INDETERMINATE, CHECKED,       CHECKED      ])).toBe(INDETERMINATE);
-       expect(calculateNodeState(CHECKED,   [INDETERMINATE, UNCHECKED,     UNCHECKED    ])).toBe(INDETERMINATE);
-       expect(calculateNodeState(UNCHECKED, [INDETERMINATE, INDETERMINATE, INDETERMINATE])).toBe(INDETERMINATE);       
+       expect(calculateNodeState([CHECKED,       CHECKED,       CHECKED      ])).toBe(CHECKED);
+       expect(calculateNodeState([UNCHECKED,     UNCHECKED,     UNCHECKED    ])).toBe(UNCHECKED);
+       expect(calculateNodeState([INDETERMINATE, INDETERMINATE, INDETERMINATE])).toBe(INDETERMINATE);
+       expect(calculateNodeState([INDETERMINATE, CHECKED,       CHECKED      ])).toBe(INDETERMINATE);
+       expect(calculateNodeState([INDETERMINATE, UNCHECKED,     UNCHECKED    ])).toBe(INDETERMINATE);
+       expect(calculateNodeState([INDETERMINATE, UNCHECKED,     CHECKED      ])).toBe(INDETERMINATE);       
     });    
 });
 

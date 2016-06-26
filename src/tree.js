@@ -13,10 +13,9 @@ export function iterateTree(treeNode, f) {
 }
 
 
-export function calculateNodeState(ownState, childrenStates) {
-    let newState = ownState;
+export function calculateNodeState(childrenStates) {
+    let newState = Checkbox.UNCHECKED;
     if (childrenStates.length > 0) {
-        
         let checkedCount = 0;
         let indeterminateCount = 0;
         for (let childState of childrenStates) {
@@ -27,16 +26,11 @@ export function calculateNodeState(ownState, childrenStates) {
             }
         }
         
+        newState = Checkbox.INDETERMINATE;
         if (checkedCount == 0 && indeterminateCount == 0) {
             newState = Checkbox.UNCHECKED;
         } else if (checkedCount == childrenStates.length) {
-            if (ownState == Checkbox.CHECKED) {
-                newState = Checkbox.CHECKED;
-            } else {
-                newState = Checkbox.INDETERMINATE;
-            }
-        } else {
-            newState = Checkbox.INDETERMINATE;
+            newState = Checkbox.CHECKED;
         }
     }
     return newState;
@@ -51,6 +45,7 @@ export class Tree extends React.Component {
         
         this.state = {
             state: ('state' in props ? props.state : Checkbox.UNCHECKED),
+            stateFromChildren: false,
             childrenState: new Array(this.props.data.children.length)
         };
         this.state.childrenState.fill(this.state.state);
@@ -59,17 +54,30 @@ export class Tree extends React.Component {
     }
     
     render() {
-        let treeNode = this.props.data;
-        let children = treeNode.children.map((child, index) =>
-            <li key={child.id}>
-                <Tree data={child} 
-                      state={this.state.childrenState[index]} 
-                      onChange={this.handleChildChange.bind(this, index)}/>
-            </li>
-        );
+        const treeNode = this.props.data;
+        
+        const childProps = {};
+        if (!this.state.stateFromChildren) {
+            childProps.state = this.state.state;
+        }
+        
+        const children = treeNode.children.map((child, index) => {
+            childProps.data = child;
+            childProps.onChange = this.handleChildChange.bind(this, index);
+            return <li key={child.id}> <Tree {...childProps} /> </li>; 
+        });
+
+        let visualState = this.state.state;
+        if (this.state.stateFromChildren) {
+            visualState = calculateNodeState(this.state.childrenState);
+            if (visualState == Checkbox.CHECKED && this.state.state != Checkbox.CHECKED) {
+                visualState = Checkbox.INDETERMINATE;
+            }
+        }
+        
         return (
             <div>
-                <Checkbox id={treeNode.id} label={treeNode.name} state={this.state.state} onChange={this.handleOwnChange} />
+                <Checkbox id={treeNode.id} label={treeNode.name} state={visualState} onChange={this.handleOwnChange} />
                 <ul>{children}</ul>
             </div>
         );
@@ -77,8 +85,7 @@ export class Tree extends React.Component {
     
     handleOwnChange(newState) {
         console.log(this.props.data.id, "self changed: ( new:", newState, " old:", this.state.state, ")");
-        
-        this.enforceState(newState);
+        this.setState({state: newState, stateFromChildren: false});
         if ('onChange' in this.props) {
             this.props.onChange(newState);
         }
@@ -88,39 +95,30 @@ export class Tree extends React.Component {
         console.log(this.props.data.id, "child changed: (index:", index, " new:", newChildState, " old:", this.state.childrenState[index], ")");
         
         if (this.state.childrenState[index] != newChildState) {
+            const prevVisualState = calculateNodeState(this.state.childrenState);
             this.state.childrenState[index] = newChildState;
-            const newOwnState = calculateNodeState(this.props.state, this.state.childrenState)
-            
-            if (newOwnState != this.state.state) {
-                this.setState({state: newOwnState}, this.notifyParent.bind(this, newOwnState));                
+            this.setState({childrenState: this.state.childrenState, stateFromChildren: true}, this.notifyParent.bind(this, prevVisualState));
+        }
+    }
+    
+    notifyParent(oldVisualState) {
+        if ('onChange' in this.props) {
+            const newVisualState = calculateNodeState(this.state.childrenState);
+            if (newVisualState != oldVisualState) {
+                this.props.onChange(newVisualState);
             }
         }
     }
     
-    notifyParent(newState) {
-        if ('onChange' in this.props) {
-            this.props.onChange(newState);
-        }
-    }
-    
-    enforceState(newState) {
-        this.setState({
-            state: newState,
-            childrenState: this.state.childrenState.fill(newState)
-        });
-    }
-    
-    // Returns true if the new state should override the current state of the root node
-    // and of all the children
-    shouldEnforceState(newState) {
-        return (newState != this.props.state) && (newState != this.state.state);
+    shouldUpdateState(newState) {
+        return (newState != this.props.state);
     }
         
     componentWillReceiveProps(nextProps) {
-        console.log(this.props.data.id, "props", nextProps.state, this.props.state, this.state.state);
+        console.log(this.props.data.id, "props (new:", nextProps.state, " old prop:", this.props.state, " old state:", this.state.state);
         if ('state' in nextProps) {
-            if (!('state' in this.props) || this.shouldEnforceState(nextProps.state)) {
-                this.enforceState(nextProps.state);
+            if (!('state' in this.props) || (nextProps.state != this.props.state)) {
+                this.setState({state: nextProps.state, stateFromChildren: false});
             }
         }
     }
