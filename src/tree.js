@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import {Checkbox} from './checkbox'
 
-// import './style.scss'
 
 export function iterateTree(treeNode, f) {
     if (f(treeNode)) {
@@ -122,10 +121,6 @@ export class Tree extends React.Component {
         }
     }
     
-    shouldUpdateState(newState) {
-        return (newState != this.props.state);
-    }
-        
     componentWillReceiveProps(nextProps) {
         console.log(this.props.data.id, "props (new:", nextProps.state, " old prop:", this.props.state, " old state:", this.state.state);
         if ('state' in nextProps) {
