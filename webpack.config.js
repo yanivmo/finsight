@@ -5,22 +5,30 @@ module.exports = {
         filename: 'bundle.js'
     },
     module : {
+        preLoaders: [
+            {
+                test: /\.jsx?$/,
+                loaders: ['eslint']
+                //include: PATHS.app
+            }
+        ],
         loaders : [
-        {
-            test: /\.jsx?/,
-            loader: 'babel'
-        },{
-            test: /\.scss$/,
-            loaders: ['style', 'css', 'sass'],
-        },{
-            test: /\.html$/,
-            loader: 'file-loader',
-            query: {name: '[name].[ext]'}
-        },{
-            test: /\/fonts\/|\\fonts\\/,
-            loader: 'file-loader',
-            query: {name: 'fonts/[name].[ext]'}
-        }]
+            {
+                test: /\.jsx?/,
+                loader: 'babel'
+            },{
+                test: /\.scss$/,
+                loaders: ['style', 'css', 'sass'],
+            },{
+                test: /\.html$/,
+                loader: 'file-loader',
+                query: {name: '[name].[ext]'}
+            },{
+                test: /\/fonts\/|\\fonts\\/,
+                loader: 'file-loader',
+                query: {name: 'fonts/[name].[ext]'}
+            }
+        ]
     },
     devtool: '#eval-source-map'
 };
