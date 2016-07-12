@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { Checkbox } from './checkbox';
 
+import './tree.scss';
+
 
 export function iterateTree(treeNode, f) {
     if (f(treeNode)) {
@@ -132,7 +134,8 @@ export class Tree extends React.Component {
         }
 
         return (
-            <div>
+            <div className="tree-node">
+                <span className="collapse-indicator-collapsed" />
                 <Checkbox
                     id={treeNode.id}
                     label={treeNode.name}

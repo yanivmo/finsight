@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { Tree } from './tree';
+import { Collapsable } from './collapsable';
 
 // Bundled files
 import './tree.html';
@@ -17,6 +18,6 @@ const data = {
 };
 
 ReactDOM.render(
-    <Tree data={data} />,
+    <Collapsable><div><Tree data={data} /></div></Collapsable>,
     document.getElementById('content')
 );

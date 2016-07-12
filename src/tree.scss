@@ -1,0 +1,30 @@
+.tree-node {
+    ul {
+        list-style: none;
+        margin: 0;
+    }
+
+    // Styles for the collapse indicator button
+    .collapse-indicator {
+        &-expanded {
+            &:after {
+                content: 'V';
+            }
+        }
+        &-collapsed {
+            &:after {
+                content: '>';
+            }
+        }
+    }
+
+    // Animate node collapse
+    &-collapsable {
+        
+
+        &-active {
+
+        }
+    }
+
+}

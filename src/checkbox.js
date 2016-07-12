@@ -57,7 +57,7 @@ export class Checkbox extends React.Component {
         /* eslint-disable no-return-assign */
         const id = `input-${this.state.id}`;
         return (
-            <div>
+            <span>
                 <input
                     type="checkbox"
                     id={id}
@@ -66,7 +66,7 @@ export class Checkbox extends React.Component {
                 />
 
                 <label htmlFor={id}>{this.props.label}</label>
-            </div>
+            </span>
         );
         /* eslint-enable no-return-assign */
     }
