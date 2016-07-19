@@ -7,3 +7,6 @@ script:
     - npm run build
     - npm test
 before_install: npm i -g npm@latest
+addons:
+    code_climate:
+        repo_token: ae7591a76cde6b5e21bc17832e487f09b7fb5c7f2ae486472f8179cbfffa49c3
