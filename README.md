@@ -1,0 +1,2 @@
+# finsight
+[![Build Status](https://travis-ci.org/yanivmo/finsight.svg?branch=master)](https://travis-ci.org/yanivmo/finsight) [![Test Coverage](https://codeclimate.com/github/yanivmo/finsight/badges/coverage.svg)](https://codeclimate.com/github/yanivmo/finsight/coverage) [![Code Climate](https://codeclimate.com/github/yanivmo/finsight/badges/gpa.svg)](https://codeclimate.com/github/yanivmo/finsight)
